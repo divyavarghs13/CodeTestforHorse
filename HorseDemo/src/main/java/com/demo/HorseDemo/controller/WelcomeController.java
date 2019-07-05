@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.HorseDemo.model.Input;
+import com.demo.HorseDemo.model.Loop;
 import com.demo.HorseDemo.model.Participant;
+import com.demo.HorseDemo.pojo.PowerUps;
 
 @Controller
 @ResponseBody
@@ -30,10 +32,14 @@ public class WelcomeController {
 			JAXBContext context = JAXBContext.newInstance(Input.class);
 			Unmarshaller um = context.createUnmarshaller();
 			Input input2 = (Input) um.unmarshal(new FileReader(xmlFile));
-			for(Participant emp : input2.getStartList())				
+			for(Participant participant : input2.getStartList())				
 			 {			
-				System.out.print(" name: " + emp.getName() );				
-			}		
+				System.out.println(" Horse name: " + participant.getName() );				
+			}	
+			for(Loop loop : input2.getPowerUps())				
+			 {			
+				System.out.println(" Loop number: " + loop.getNumber() );				
+			}	
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}

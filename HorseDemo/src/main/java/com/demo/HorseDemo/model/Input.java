@@ -21,6 +21,10 @@ public class Input implements Serializable {
 	@XmlElement(name = "participant", type = Participant.class)
 	private ArrayList<Participant> startList;
 
+	@XmlElementWrapper(name = "powerUps") 
+	@XmlElement(name = "Loop", type = Loop.class)
+	private ArrayList<Loop> powerUps;
+	
 	public int getNumberOfLoops() {
 		return numberOfLoops;
 	}
@@ -39,9 +43,23 @@ public class Input implements Serializable {
 		this.startList = startList;
 	}
 
+	public ArrayList<Loop> getPowerUps() {
+		
+		  if (powerUps==null) {
+			  powerUps=new ArrayList<Loop>();
+	        }
+			return this.powerUps;
+	}
+
+	public void setPowerUps(ArrayList<Loop> powerUps) {
+		this.powerUps = powerUps;
+	}
+
 	@Override
 	public String toString() {
-		return "Input [numberOfLoops=" + numberOfLoops + ", startList=" + startList + "]";
+		return "Input [numberOfLoops=" + numberOfLoops + ", startList=" + startList + ", powerUps=" + powerUps + "]";
 	}
+
+	
 
 }

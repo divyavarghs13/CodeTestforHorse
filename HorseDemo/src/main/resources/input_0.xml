@@ -22,4 +22,18 @@
             <baseSpeed>10</baseSpeed>
         </participant>
     </startList>
+    <powerUps>
+        <loop number="1">
+            <lane number="1">1</lane>
+            <lane number="2">1</lane>
+            <lane number="3">0</lane>
+            <lane number="4">-2</lane>
+        </loop>
+        <loop number="2">
+            <lane number="1">1</lane>
+            <lane number="2">-1</lane>
+            <lane number="3">2</lane>
+            <lane number="4">-2</lane>
+        </loop>
+    </powerUps>
 </harryKart>
