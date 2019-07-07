@@ -22,7 +22,6 @@ public class Loop implements Serializable {
 	@XmlAttribute
 	private int number;
 	
-	//@XmlElementWrapper(name = "loop") 
 	@XmlElement(name="lane" , type =Lane.class)
 	private ArrayList<Lane> laneList;
 
