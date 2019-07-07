@@ -25,7 +25,7 @@
     <powerUps>
         <loop number="1">
             <lane number="1">1</lane>
-            <lane number="2">1</lane>
+            <lane number="2">5</lane>
             <lane number="3">0</lane>
             <lane number="4">-2</lane>
         </loop>

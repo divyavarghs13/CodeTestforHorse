@@ -22,7 +22,7 @@ public class Input implements Serializable {
 	private ArrayList<Participant> startList;
 
 	@XmlElementWrapper(name = "powerUps") 
-	@XmlElement(name = "Loop", type = Loop.class)
+	@XmlElement(name = "loop", type = Loop.class)
 	private ArrayList<Loop> powerUps;
 	
 	public int getNumberOfLoops() {
@@ -54,6 +54,9 @@ public class Input implements Serializable {
 	public void setPowerUps(ArrayList<Loop> powerUps) {
 		this.powerUps = powerUps;
 	}
+
+	
+	
 
 	@Override
 	public String toString() {

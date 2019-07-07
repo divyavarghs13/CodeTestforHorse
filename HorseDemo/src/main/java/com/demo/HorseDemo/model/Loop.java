@@ -1,7 +1,7 @@
 package com.demo.HorseDemo.model;
 
 import java.io.Serializable;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-@XmlRootElement(name = "loop")
+@XmlRootElement(name = "powerUps")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Loop implements Serializable {
 	
@@ -22,9 +22,9 @@ public class Loop implements Serializable {
 	@XmlAttribute
 	private int number;
 	
-	@XmlElementWrapper(name = "laneList") 
-	@XmlElement(name="Lane")
-	private List<Lane> laneList;
+	//@XmlElementWrapper(name = "loop") 
+	@XmlElement(name="lane" , type =Lane.class)
+	private ArrayList<Lane> laneList;
 
 
 	public Loop() {
@@ -43,12 +43,18 @@ public class Loop implements Serializable {
 	}
 
 
-	public List<Lane> getLaneList() {
+	
+
+
+	public ArrayList<Lane> getLaneList() {
+		if (laneList==null) {
+			laneList=new ArrayList<Lane>();
+        }
 		return laneList;
 	}
 
 
-	public void setLaneList(List<Lane> laneList) {
+	public void setLaneList(ArrayList<Lane> laneList) {
 		this.laneList = laneList;
 	}
 
