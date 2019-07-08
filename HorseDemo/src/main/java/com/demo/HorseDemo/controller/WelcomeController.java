@@ -28,6 +28,7 @@ import com.demo.HorseDemo.model.Loop;
 import com.demo.HorseDemo.model.Participant;
 import com.demo.HorseDemo.model.ParticipantLane;
 import com.demo.HorseDemo.service.HorseService;
+import com.demo.HorseDemo.util.RaceUtilitiy;
 
 @Controller
 @ResponseBody
@@ -42,72 +43,78 @@ public class WelcomeController {
 	@Autowired
 	private HorseService horseService;
 
+	@Autowired
+	private RaceUtilitiy raceUtil;
+
+	Map<Integer, Participant> participantMap = new HashMap<>();
+	List<ParticipantLane> partList = new ArrayList<>();
+	Map<Integer, List<ParticipantLane>> participantLoop = new HashMap<>();
+	ParticipantLane partLaneObj = null;
+	String resultData;
+
 	@RequestMapping(value = "play", method = RequestMethod.GET, produces = "application/json")
-	public void handleXMLPostRequest() throws IOException {
+	public String handleXMLPostRequest() throws IOException {
+
 		try {
+
 			JAXBContext context = JAXBContext.newInstance(Input.class);
 			Unmarshaller um = context.createUnmarshaller();
 			Input input2 = (Input) um.unmarshal(new FileReader(xmlFile));
-
-			Map<Integer, Participant> participantMap = new HashMap<>();
-			List<ParticipantLane> partList = new ArrayList<>();
-			Map<Integer, List<ParticipantLane>> participantLoop = new HashMap<>();
-			ParticipantLane partLaneObj = null;
-			for (Participant participant : input2.getStartList()) {
-				partLaneObj = new ParticipantLane();
-				partLaneObj.setPartId(participant.getLane());
-				partLaneObj.setParticipant(participant);
-				partLaneObj.setSpeed(10);
-				participantMap.put(participant.getLane(), participant);
-				partList.add(partLaneObj);
-				logger.info(" Participants: " + participant.getName());
-			}
-			participantLoop.put(0, partList);
-
-			for (Loop loop : input2.getPowerUps()) {
-				ParticipantLane partLaneNewObj = null;
-				partList = new ArrayList<>();
-				for (Lane lane : loop.getLaneList()) {
-					partLaneNewObj = new ParticipantLane();
-					// logger.info("lane number :" + lane.getLanenumber()+", lane value :" +
-					// lane.getLaneValue());
-					partLaneNewObj.setPartId(lane.getLanenumber());
-					partLaneNewObj.setSpeed(lane.getLaneValue());
-					partLaneNewObj.setParticipant(participantMap.get(lane.getLanenumber()));
-					partList.add(partLaneNewObj);
-				}
-				System.out.println(" Loop number: " + loop.getNumber());
-				participantLoop.put(loop.getNumber(), partList);
-
-			}
+			processXMLToPojo(input2);
 			List<Participant> outputList = horseService.fetchWinner(participantLoop, participantMap);
-			JSONArray outputArray = new JSONArray();
-			JSONObject outputJson = new JSONObject();
+			resultData = raceUtil.GetJSONData(outputList);
+			return resultData;
+		}
 
-			try {
-				JSONObject participantJson = null;
-				int counter = 1;
-				for (Participant participant : outputList) {
-					participantJson = new JSONObject();
-					participantJson.put("Position", counter);
-					participantJson.put("horse", participant.getName());
-					counter++;
-					outputArray.put(participantJson);
-				}
-				outputJson.put("ranking", outputArray);
-
-				// get Organisation object as a json string
-				String jsonStr = outputJson.toString();
-				// Displaying JSON String
-				System.out.println(jsonStr);
-			}
-
-			catch (JSONException e) {
-				e.printStackTrace();
-			}
+		catch (JSONException e) {
+			e.printStackTrace();
 		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return resultData;
 	}
 
+	public void processXMLToPojo(Input input) throws IOException {
+		/**
+		 * Retrieving Participant details as list from startList. Set a pojo class with
+		 * Lane number as Participant ID along with other Participant data. Initialize a
+		 * map with Key as Participant ID and Participant Object as Value
+		 **/
+		for (Participant participant : input.getStartList()) {
+			partLaneObj = new ParticipantLane();
+			partLaneObj.setPartId(participant.getLane());
+			partLaneObj.setParticipant(participant);
+			partLaneObj.setSpeed(10);
+			participantMap.put(participant.getLane(), participant);
+			partList.add(partLaneObj);
+			logger.info(" Participant: " + participant.getName() + ", Lane: " + participant.getLane());
+		}
+		/**
+		 * Initialize the map with key as 0 to consider as 1st loop and value as the
+		 * list with participant details
+		 **/
+		participantLoop.put(0, partList);
+		/**
+		 * Retrieve the loop data from input xml file. The lane number is added to
+		 * participant object and adding to the list
+		 **/
+		for (Loop loop : input.getPowerUps()) {
+			ParticipantLane partLaneNewObj = null;
+			partList = new ArrayList<>();
+			for (Lane lane : loop.getLaneList()) {
+				partLaneNewObj = new ParticipantLane();
+				// logger.info("lane number :" + lane.getLanenumber()+", lane value :" +
+				// lane.getLaneValue());
+				partLaneNewObj.setPartId(lane.getLanenumber());
+				partLaneNewObj.setSpeed(lane.getLaneValue());
+				partLaneNewObj.setParticipant(participantMap.get(lane.getLanenumber()));
+				partList.add(partLaneNewObj);
+			}
+			// System.out.println(" Loop number: " + loop.getNumber());
+			/** We add the data to the map with key increasing each time in the loop **/
+			participantLoop.put(loop.getNumber(), partList);
+
+		}
+	}
 }
