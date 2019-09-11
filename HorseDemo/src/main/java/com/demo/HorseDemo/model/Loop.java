@@ -12,6 +12,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 @XmlRootElement(name = "powerUps")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -22,7 +24,8 @@ public class Loop implements Serializable {
 	@XmlAttribute
 	private int number;
 	
-	@XmlElement(name="lane" , type =Lane.class)
+	@Autowired
+	@XmlElement(name="lane" , type=Lane.class)
 	private ArrayList<Lane> laneList;
 
 

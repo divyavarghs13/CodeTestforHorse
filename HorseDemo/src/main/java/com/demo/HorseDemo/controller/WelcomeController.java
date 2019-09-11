@@ -1,6 +1,7 @@
 package com.demo.HorseDemo.controller;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +18,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.HorseDemo.model.Input;
@@ -38,7 +42,6 @@ public class WelcomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(WelcomeController.class);
 
-	private static final String xmlFile = "input_0.xml";
 
 	@Autowired
 	private HorseService horseService;
@@ -52,26 +55,18 @@ public class WelcomeController {
 	ParticipantLane partLaneObj = null;
 	String resultData;
 
-	@RequestMapping(value = "play", method = RequestMethod.GET, produces = "application/json")
-	public String handleXMLPostRequest() throws IOException {
-
+	@RequestMapping(value = "play", method = RequestMethod.POST, produces = "application/json" , consumes="application/xml")
+	public String handleXMLPostRequest(@RequestBody Input inputXml) throws IOException {
 		try {
-
-			JAXBContext context = JAXBContext.newInstance(Input.class);
-			Unmarshaller um = context.createUnmarshaller();
-			Input input2 = (Input) um.unmarshal(new FileReader(xmlFile));
-			processXMLToPojo(input2);
+			processXMLToPojo(inputXml);
 			List<Participant> outputList = horseService.fetchWinner(participantLoop, participantMap);
 			resultData = raceUtil.GetJSONData(outputList);
 			return resultData;
 		}
-
 		catch (JSONException e) {
 			e.printStackTrace();
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} 
+		
 		return resultData;
 	}
 
