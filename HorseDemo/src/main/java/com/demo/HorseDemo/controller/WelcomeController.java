@@ -1,29 +1,19 @@
 package com.demo.HorseDemo.controller;
 
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.demo.HorseDemo.model.Input;
@@ -38,7 +28,7 @@ import com.demo.HorseDemo.util.RaceUtilitiy;
 @ResponseBody
 @RequestMapping("/api")
 public class WelcomeController {
-	JAXBContext jaxbContext;
+	//JAXBContext jaxbContext;
 
 	private static final Logger logger = LoggerFactory.getLogger(WelcomeController.class);
 
@@ -99,11 +89,11 @@ public class WelcomeController {
 			partList = new ArrayList<>();
 			for (Lane lane : loop.getLaneList()) {
 				partLaneNewObj = new ParticipantLane();
-				// logger.info("lane number :" + lane.getLanenumber()+", lane value :" +
-				// lane.getLaneValue());
-				partLaneNewObj.setPartId(lane.getLanenumber());
+				 logger.info("lane number :" + lane.getNumber()+", lane value :" +
+				 lane.getLaneValue());
+				partLaneNewObj.setPartId(lane.getNumber());
 				partLaneNewObj.setSpeed(lane.getLaneValue());
-				partLaneNewObj.setParticipant(participantMap.get(lane.getLanenumber()));
+				partLaneNewObj.setParticipant(participantMap.get(lane.getNumber()));
 				partList.add(partLaneNewObj);
 			}
 			// System.out.println(" Loop number: " + loop.getNumber());

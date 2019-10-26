@@ -14,8 +14,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-@XmlRootElement(name = "powerUps")
+@XmlRootElement(name = "loop")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Loop implements Serializable {
 	
@@ -24,17 +23,16 @@ public class Loop implements Serializable {
 	@XmlAttribute
 	private int number;
 	
-	@Autowired
-	@XmlElement(name="lane" , type=Lane.class)
-	private ArrayList<Lane> laneList;
+
+	private ArrayList<Lane> lane;
 
 
-	public Loop() {
-		super();
+	//public Loop() {
+	//super();
 		// TODO Auto-generated constructor stub
-	}
+	//}
 
-
+	
 	public int getNumber() {
 		return number;
 	}
@@ -45,26 +43,27 @@ public class Loop implements Serializable {
 	}
 
 
-	
-
-
 	public ArrayList<Lane> getLaneList() {
-		if (laneList==null) {
-			laneList=new ArrayList<Lane>();
+		if (lane==null) {
+			lane=new ArrayList<Lane>();
         }
-		return laneList;
+		return lane;
 	}
 
 
+	@XmlElementWrapper(name = "loop")
+	@XmlElement(name = "lane", type = Lane.class)
 	public void setLaneList(ArrayList<Lane> laneList) {
-		this.laneList = laneList;
+		this.lane = laneList;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Loop [number=" + number + ", laneList=" + laneList + "]";
+		return "Loop [number=" + number + ", laneList=" + lane + "]";
 	}
+
+
 
 	
 
